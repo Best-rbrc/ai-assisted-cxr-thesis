@@ -2,7 +2,9 @@
 
 *From Architecture Selection to Explainability, Calibration, Fairness, and Human-AI Collaboration in Chest X-Ray Classification*
 
-This repository contains the code, data, and trained-model artefacts that accompany the bachelor thesis *Towards Responsible AI-Assisted Radiology: From Architecture Selection to Explainability, Calibration, Fairness, and Human-AI Collaboration in Chest X-Ray Classification* by Benjamin Stieger, supervised by Bernhard Bermeitinger, University of St. Gallen (Bachelor of Science in Computer Science, May 2026).
+This repository is the **complete code release** accompanying the bachelor thesis *Towards Responsible AI-Assisted Radiology: From Architecture Selection to Explainability, Calibration, Fairness, and Human-AI Collaboration in Chest X-Ray Classification* by Benjamin Stieger, supervised by Bernhard Bermeitinger, University of St. Gallen (Bachelor of Science in Computer Science, May 2026).
+
+It includes the full training, evaluation and explainability pipeline, the React/Supabase user-study app, and the aggregated evaluation outputs (metrics, calibration and fairness results). Raw user-study data and CheXpert-derived images are not included; see [Data](#data) and the note on images below.
 
 The work has three components:
 
