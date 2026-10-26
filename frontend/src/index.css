@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* iOS Safari 100vh fix: use dynamic viewport height so browser chrome is excluded */
+@supports (min-height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+}
+
+/* Prevent horizontal overflow/scrolling on all screens */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+@layer base {
+  :root {
+    --background: 220 18% 7%;
+    --foreground: 210 12% 88%;
+
+    --card: 220 16% 10%;
+    --card-foreground: 210 12% 88%;
+
+    --popover: 220 16% 10%;
+    --popover-foreground: 210 12% 88%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 220 18% 7%;
+
+    --secondary: 220 14% 13%;
+    --secondary-foreground: 210 10% 62%;
+
+    --muted: 220 14% 13%;
+    --muted-foreground: 215 8% 46%;
+
+    --accent: 220 14% 16%;
+    --accent-foreground: 210 12% 88%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 64% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+
+    --border: 220 12% 14%;
+    --input: 220 14% 13%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.25rem;
+
+    --sidebar-background: 220 16% 10%;
+    --sidebar-foreground: 210 12% 88%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 13%;
+    --sidebar-accent-foreground: 210 12% 88%;
+    --sidebar-border: 220 12% 14%;
+    --sidebar-ring: 199 89% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tight scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.3);
+  }
+
+  /* Monospaced numerals */
+  .tabular-nums {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-card/80 border border-border rounded backdrop-blur-sm;
+  }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scale-in 0.25s ease-out forwards;
+}

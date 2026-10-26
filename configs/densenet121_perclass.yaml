@@ -1,0 +1,55 @@
+experiment_name: "densenet121_perclass"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"
+  test_csv:  "CheXpert-v1.0-small/test.csv"
+  image_size: 224
+  frontal_only: true
+
+  # Same per-label strategy as Run 008 (Swin perclass)
+  uncertainty_strategy: "u-mixed"
+  per_label_strategies:
+    Cardiomegaly: "u-zeros"
+    Edema: "u-ones"
+    Consolidation: "u-ones"
+    Atelectasis: "u-ones"
+    Pleural Effusion: "u-zeros"
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+
+# ── Model ──
+model:
+  architecture: "densenet121"
+  pretrained: true
+  num_classes: 5
+
+# ── Training ──
+training:
+  batch_size: 64
+  num_workers: 4
+  epochs: 20
+  learning_rate: 0.0001    # CNNs tolerate higher LR than transformers
+  weight_decay: 0.01
+  warmup_epochs: 1
+  scheduler: "cosine"
+  early_stopping_patience: 5
+  pos_weight: true
+
+# ── Device ──
+device: "auto"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true

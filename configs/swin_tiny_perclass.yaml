@@ -1,0 +1,62 @@
+experiment_name: "swin_tiny_perclass"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"
+  test_csv:  "CheXpert-v1.0-small/test.csv"
+  image_size: 224
+  frontal_only: true
+
+  # Per-label uncertainty strategy based on Stanford CheXpert findings:
+  #   Atelectasis     → U-Ones  (positive correlation with uncertainty)
+  #   Edema           → U-Ones  (Stanford paper: U-Ones best)
+  #   Consolidation   → U-Ones  (proxy for U-SelfTrained; U-Ones best practical approx)
+  #   Cardiomegaly    → U-Zeros (Stanford: U-MultiClass ≈ U-Zeros for binary BCE)
+  #   Pleural Effusion→ U-Zeros (Stanford: U-MultiClass / U-Zeros)
+  uncertainty_strategy: "u-mixed"
+  per_label_strategies:
+    Cardiomegaly: "u-zeros"
+    Edema: "u-ones"
+    Consolidation: "u-ones"
+    Atelectasis: "u-ones"
+    Pleural Effusion: "u-zeros"
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+
+# ── Model ──
+model:
+  architecture: "swin_tiny"
+  pretrained: true
+  num_classes: 5
+
+# ── Training ──
+training:
+  batch_size: 64
+  num_workers: 4
+  epochs: 30
+  learning_rate: 0.00005
+  weight_decay: 0.05
+  warmup_epochs: 2
+  scheduler: "cosine"
+  early_stopping_patience: 7
+  # pos_weight weights each positive sample by (n_neg / n_pos) per class.
+  # Addresses CheXpert's strong class imbalance (Consolidation ~4% positive).
+  pos_weight: true
+
+# ── Device ──
+device: "auto"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true

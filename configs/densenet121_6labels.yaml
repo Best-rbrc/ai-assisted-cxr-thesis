@@ -1,0 +1,59 @@
+experiment_name: "densenet121_6labels"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"
+  test_csv:  "CheXpert-v1.0-small/test.csv"
+  image_size: 224
+  frontal_only: true
+
+  # Same per-label strategies as Run 010/012 for the core 5 labels.
+  # Pneumothorax uses u-ones (same as Run 012, proven to work).
+  # Fracture dropped entirely — unusable F1 and not needed for user study.
+  uncertainty_strategy: "u-mixed"
+  per_label_strategies:
+    Cardiomegaly: "u-zeros"
+    Edema: "u-ones"
+    Consolidation: "u-ones"
+    Atelectasis: "u-ones"
+    Pleural Effusion: "u-zeros"
+    Pneumothorax: "u-ones"
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+    - "Pneumothorax"
+
+# ── Model ──
+model:
+  architecture: "densenet121"
+  pretrained: true
+  num_classes: 6
+
+# ── Training ──
+training:
+  batch_size: 64
+  num_workers: 4
+  epochs: 20
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  warmup_epochs: 1
+  scheduler: "cosine"
+  early_stopping_patience: 5
+  pos_weight: true
+
+# ── Device ──
+device: "auto"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true

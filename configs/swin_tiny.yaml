@@ -1,0 +1,46 @@
+experiment_name: "swin_tiny"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"  # 95% of train_split.csv (patient-level)
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"    # 5%  of train_split.csv (~9.6k samples)
+  test_csv:  "CheXpert-v1.0-small/test.csv"          # 15% held-out for final evaluation only
+  image_size: 384
+  frontal_only: true
+  uncertainty_strategy: "u-mask"   # "u-ones", "u-zeros", "u-ignore", "u-mask"
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+
+# ── Model ──
+model:
+  architecture: "swin_tiny"
+  pretrained: true
+  num_classes: 5
+
+# ── Training ──
+training:
+  batch_size: 32
+  num_workers: 2
+  epochs: 30
+  learning_rate: 0.00005   # transformers benefit from a lower LR than CNNs
+  weight_decay: 0.05        # standard for Swin/ViT (original paper uses 0.05)
+  warmup_epochs: 2          # shorter warmup = more effective training epochs
+  scheduler: "cosine"
+  early_stopping_patience: 7  # transformers converge more slowly
+
+# ── Device ──
+device: "auto"  # "auto", "mps", "cuda", "cpu"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true

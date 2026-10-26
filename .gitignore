@@ -1,0 +1,56 @@
+# ── Dataset (too large for git) ──
+chexpert_small
+chexpert_small/
+CheXpert-v1.0-small
+CheXpert-v1.0-small/
+
+# ── Python / uv ──
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# ── Training artifacts ──
+checkpoints/
+runs/
+*.pt
+*.pth
+
+# ── Jupyter ──
+.ipynb_checkpoints/
+
+# ── IDE / OS ──
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── Frontend ──
+frontend/.git_backup/
+frontend/.env
+frontend/node_modules/
+frontend/dist/
+
+# ── LaTeX auxiliary ──
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.bcf
+*.bbl
+*.bbl-SAVE-ERROR
+*.blg
+*.toc
+*.lof
+*.lot
+*.nlo
+*.run.xml
+*.synctex.gz
+
+# ── Working/archived material (not part of submission) ──
+Archive/
+data/*.csv

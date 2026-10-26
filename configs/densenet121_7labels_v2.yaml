@@ -1,0 +1,68 @@
+experiment_name: "densenet121_7labels_v2"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"
+  test_csv:  "CheXpert-v1.0-small/test.csv"
+  image_size: 224
+  frontal_only: true
+
+  # Per-label strategy.
+  # Original 5 labels: identical to Run 010/012 (proven best settings).
+  # Fracture & Pneumothorax: switched from u-ones → nan-mask.
+  #   Rationale: both labels have ~65–95 % NaN in CheXpert.  Treating NaN
+  #   as implicit-negative (the u-ones / u-zeros default) floods training
+  #   with false negatives and suppresses model confidence to ~0.15-0.25,
+  #   causing F1 ≈ 0.22 for Fracture even when AUROC ≈ 0.87.
+  #   nan-mask excludes all unlabelled rows from the loss so only the
+  #   9,836 explicitly-labelled Fracture rows and ~63,716 Pneumothorax
+  #   rows contribute — eliminating the false-negative flood.
+  uncertainty_strategy: "u-mixed"
+  per_label_strategies:
+    Cardiomegaly:    "u-zeros"
+    Edema:           "u-ones"
+    Consolidation:   "u-ones"
+    Atelectasis:     "u-ones"
+    Pleural Effusion: "u-zeros"
+    Fracture:        "nan-mask"   # was u-ones in Run 012
+    Pneumothorax:    "nan-mask"   # was u-ones in Run 012
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+    - "Fracture"
+    - "Pneumothorax"
+
+# ── Model ──
+model:
+  architecture: "densenet121"
+  pretrained: true
+  num_classes: 7
+
+# ── Training ──
+training:
+  batch_size: 64
+  num_workers: 4
+  epochs: 20
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  warmup_epochs: 1
+  scheduler: "cosine"
+  early_stopping_patience: 5
+  pos_weight: true
+
+# ── Device ──
+device: "auto"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true

@@ -1,0 +1,47 @@
+experiment_name: "densenet121_cxr"
+
+# ── Data ──
+data:
+  data_dir: "CheXpert-v1.0-small"
+  train_csv: "CheXpert-v1.0-small/train_proper.csv"
+  valid_csv: "CheXpert-v1.0-small/val_proper.csv"
+  test_csv:  "CheXpert-v1.0-small/test.csv"
+  image_size: 224
+  frontal_only: true
+  uncertainty_strategy: "u-mask"
+  cxr_pretrained: true   # uses grayscale + xrv normalization
+
+# ── Labels ──
+labels:
+  target_labels:
+    - "Cardiomegaly"
+    - "Edema"
+    - "Consolidation"
+    - "Atelectasis"
+    - "Pleural Effusion"
+
+# ── Model ──
+model:
+  architecture: "densenet121_cxr"   # torchxrayvision: pretrained on 7 CXR datasets
+  pretrained: true
+  num_classes: 5
+
+# ── Training ──
+training:
+  batch_size: 32
+  num_workers: 2
+  epochs: 15
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  warmup_epochs: 1
+  scheduler: "cosine"
+  early_stopping_patience: 5
+
+# ── Device ──
+device: "auto"
+
+# ── Logging ──
+logging:
+  checkpoint_dir: "checkpoints"
+  log_dir: "runs"
+  save_best_only: true
